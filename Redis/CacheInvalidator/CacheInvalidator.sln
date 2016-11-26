@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheInvalidator", "CacheInvalidator\CacheInvalidator.csproj", "{0460A3EB-5BBF-4828-A1F1-50834AD56A9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableProvider", "TableProvider\TableProvider.csproj", "{CBA2BE3E-DF32-4B3E-89FA-DAB1FF56EE93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheProvider", "CacheProvider\CacheProvider.csproj", "{B3FC57A6-7160-4B02-B6C7-04556D6A9BBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0460A3EB-5BBF-4828-A1F1-50834AD56A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0460A3EB-5BBF-4828-A1F1-50834AD56A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0460A3EB-5BBF-4828-A1F1-50834AD56A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0460A3EB-5BBF-4828-A1F1-50834AD56A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBA2BE3E-DF32-4B3E-89FA-DAB1FF56EE93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBA2BE3E-DF32-4B3E-89FA-DAB1FF56EE93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBA2BE3E-DF32-4B3E-89FA-DAB1FF56EE93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBA2BE3E-DF32-4B3E-89FA-DAB1FF56EE93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3FC57A6-7160-4B02-B6C7-04556D6A9BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3FC57A6-7160-4B02-B6C7-04556D6A9BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3FC57A6-7160-4B02-B6C7-04556D6A9BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3FC57A6-7160-4B02-B6C7-04556D6A9BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://pratikvsb.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CacheInvalidator\\CacheInvalidator.csproj
+		SccProjectName1 = CacheInvalidator
+		SccLocalPath1 = CacheInvalidator
+		SccProjectUniqueName2 = TableProvider\\TableProvider.csproj
+		SccProjectName2 = TableProvider
+		SccLocalPath2 = TableProvider
+		SccProjectUniqueName3 = CacheProvider\\CacheProvider.csproj
+		SccProjectName3 = CacheProvider
+		SccLocalPath3 = CacheProvider
+	EndGlobalSection
+EndGlobal
