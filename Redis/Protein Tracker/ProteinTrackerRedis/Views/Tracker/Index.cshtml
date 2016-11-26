@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Protein Tracker";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tracker</h2>
+<p>User: @Html.ActionLink((string)@ViewBag.UserName, "Edit", "Users", new { userId = ViewBag.UserId}, null)</p>
+@using (Html.BeginForm("Index", "Tracker", FormMethod.Post))
+{
+    <p>Amount: </p>
+    <input type="text" id="amount" name="amount"/>
+    <input type="submit" name="Enter"/>
+    <input type="hidden" name ="userId" value ="@ViewBag.UserId"/>
+}
+
+<p>Total: @ViewBag.Total</p>
+<p>Goal: @ViewBag.Goal</p>
+
+@Html.ActionLink("Leaderboard", "Index", "Leaderbord");
+
+<div>
+    <p>History</p>
+    @foreach (var historyItem in ViewBag.HistoryItems)
+    {
+        <p>Added Amount: @historyItem</p>
+    }
+</div>
