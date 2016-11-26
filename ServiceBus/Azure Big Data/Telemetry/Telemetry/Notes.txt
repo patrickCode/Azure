@@ -1,0 +1,43 @@
+﻿1. Efficiency
+	-High Volume of Messages
+		Batching and zipping reduces API Load
+		By batching the events we can reduce the number of API calls, hence it will take take lesser number of services to run the API
+	-Lean API
+2. Reliability
+	-Keep all Events
+		If the API fails to send the events, then it should tell the client. Client can store them locally and post the batch once again.
+	-Solid API
+		The API cannot have bottleneck, with Big Data scenario, bottlenecks tuen into a huge processing backlog.
+3. Traceability
+	-Centralized Logging
+	-Exceptions and Heartbeat
+
+Event Hubs
+Event Hubs are designed for producing messaging at Big Data level.
+Event Hubs cannot be used as a permenant store for Events. They retain message for only 7 days, the reason to persist events for 7 days, is to give the recievers the chance to read the events.
+Events Hubs are physically partitioned into many divisions, the messages get stored in each divisions. Logically there is only 1 hub but physically Event hubs scale using the concept of physical partitions. Each partition can store upto a 1000 messages per second. Hub follows a FIFO architecture. Once a Event Hub has been created in Azure, the number of partitions cannot be changed (10,000 events per sec will need 10 partitions).
+Events coming from server may have a corrupt timestamp (due to hardware issues). So before sending the event to the Event hub, we need to add the Server timestamp value to it. Event properties are easier to read than the event payload/message, so some of the metadata can be written to the event property than the message. They are easier to read and process.
+The device Id from the event will be used to create the Partition Key, this key can be used by the clients reading from the hub to decide which partion the event belongs to.
+Limitations of Sending batch
+	- Message size cannot exceed 256 KB. The GZIP file that we are processing may get decompressed into a huge message. So we need to split the batches.
+	- All the batched events must have a same Partition Key. So if we try to batch events coming from different sources, they will have different device IDs, hence we won't be able to batch them.
+Throughput Units
+	While creating Event Hubs, number of partitions can be setup (can't be changes during runtime), it represents the logical layout of the Event hub. Each hub is limited to 1K events/sec. Event Hubs scales by increasing the throughput unit, physical deployment of the Event Hub. Each throughput can ingest 1K events per sec and has a storage limit of 84GB. Throughput can be thought of as a server. Each partition has a dedicated throughput unit. A Hub can accept 1000 messages per second per partition.
+We should not analyse the events in the API (that will take time), in the API we can add extra features like batching the events, checking the max size, adding extra info to the event. We should not analyse the event becasue that will take time and we need to send the response back to the client regarding the event ingestion.
+
+Storage. (Blobs)
+We cannot have a single blob for every events, that would mean billions of small blobs. For Hadoop queries, its easier to query small number of files with nbig size rather that querying huge number of small sized files. So we can get all the events in a partition for an hour, compress is (gzip) and then store that in storage ({partition}/{hour}.json.gz). So with 16 partitions, each partition will create 24 events per day so 384 files per day.
+Reading data from the event hub using a single thread can be tough, because we are expecting half a billion events to be stored per day. To ease that we can use multi-threaded approach, however that will lead to concurrency issues. To deal with that we can create a rule that only one thread can read from a partition at one point of time. So one thread will only read from one partition and keep on appending the data from the event hub partition to a file that it corresponds to that partition. Every hour it can add that file to the Blob storage. No need to maintain any lock because only one thread can append to the file (because that file contains data from one partition)
+EventProcessorHost does the job for us. It manages one thread having access to one partition. It uses Azure blob storage internally for checkpointing. The blob storage records which host has access to which partition, and how many events have been read. So if processing thread stops then another can pick it up from where it had left, so no event will be skipped or processed twice.
+Competing Customer (Locks on Hosts for Event Processor) - Greedy method
+	Event Processor host ensures that messages from a single partition gets read by only 1 host (Host name needs to be unique). When the processor host starts it finds out how many partitions the hub has and tries to get a lock on as much as it can for it to process. The actual locking is done using Azure blob. The host creates a blob for each partition. The blob contains data like below:
+	{
+		"PartitionId": 0,
+		"Owner": "Some_Host",
+		"Token": "a5d5s6-asdsa9a",
+		"Epoch": 2, (Epoch for when the lease expires)
+		"Offset": "", (How far through the partition has already been read)
+		"SequenceNumber": 0
+	}
+	If another host comes, it checks which partitions are not exclusively locked, it gets a lock on the partitions which are not alread locked by the previous host. On whichever partition the new host gets a lock, it starts reading from that partition. It uses the Offset to read from the place where the last host had left off and will keep reading until its lock has expired.
+	Using this approach the load can be distributed among various hosts.
