@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telemetry.Api", "Telemetry\Telemetry.Api.csproj", "{B265078E-37FF-4CC8-99C6-3D70D40A8C88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{26A65F71-BE74-49DB-8FDA-D20EB208AB30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{DF62A167-3FEC-4C4F-8AB4-F2BC88F484B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telemetry.Core", "Telemetry.Core\Telemetry.Core.csproj", "{12B194D8-D00F-482A-BE2F-3B2EC39C685A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B265078E-37FF-4CC8-99C6-3D70D40A8C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B265078E-37FF-4CC8-99C6-3D70D40A8C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B265078E-37FF-4CC8-99C6-3D70D40A8C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B265078E-37FF-4CC8-99C6-3D70D40A8C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12B194D8-D00F-482A-BE2F-3B2EC39C685A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B194D8-D00F-482A-BE2F-3B2EC39C685A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B194D8-D00F-482A-BE2F-3B2EC39C685A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B194D8-D00F-482A-BE2F-3B2EC39C685A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B265078E-37FF-4CC8-99C6-3D70D40A8C88} = {26A65F71-BE74-49DB-8FDA-D20EB208AB30}
+		{12B194D8-D00F-482A-BE2F-3B2EC39C685A} = {DF62A167-3FEC-4C4F-8AB4-F2BC88F484B4}
+	EndGlobalSection
+EndGlobal

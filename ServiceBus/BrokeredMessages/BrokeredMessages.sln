@@ -1,0 +1,125 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBus.Artifacts", "ServiceBus.Artifacts\ServiceBus.Artifacts.csproj", "{9DE32C14-778F-4B6B-96F6-2E886021554C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messages", "Messages", "{59432B18-F324-4532-90CD-E5A990BEC59E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.Contracts", "Messages\Messages.Contracts\Messages.Contracts.csproj", "{AE7E76A8-243D-46BE-A5A7-019327795FE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.Sender", "Messages.Sender\Messages.Sender.csproj", "{9322E9E0-8693-4063-8FDC-719B342AAF25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Json.Receiver", "Messages\Json.Receiver\Json.Receiver.csproj", "{8A62CE4F-D376-4DA3-95C7-604F9033190D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Json.Sender", "Messages\Json.Sender\Json.Sender.csproj", "{441B2C1F-7EDB-4A57-BB18-46C07376684D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.Receiver", "Messages\Messages.Receiver\Messages.Receiver.csproj", "{B4E14CE6-2732-4530-AD65-98DEECDBBBE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PubSub", "PubSub", "{CEA0F43D-1888-40BC-B5AE-94DAEA3103EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "PubSub\Notification\Notification.csproj", "{FCF56D8B-C05B-4FEE-A0D3-63DC46AA7A3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filter", "Filter\Filter.csproj", "{52E9491C-0639-4CEB-BC82-2034852ADA6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filter.Wiretap", "Filter.Wiretap\Filter.Wiretap.csproj", "{9A444BD5-3A99-40F5-98CE-0809D06B78DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9DE32C14-778F-4B6B-96F6-2E886021554C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE32C14-778F-4B6B-96F6-2E886021554C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE32C14-778F-4B6B-96F6-2E886021554C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE32C14-778F-4B6B-96F6-2E886021554C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE7E76A8-243D-46BE-A5A7-019327795FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE7E76A8-243D-46BE-A5A7-019327795FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE7E76A8-243D-46BE-A5A7-019327795FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE7E76A8-243D-46BE-A5A7-019327795FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9322E9E0-8693-4063-8FDC-719B342AAF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9322E9E0-8693-4063-8FDC-719B342AAF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9322E9E0-8693-4063-8FDC-719B342AAF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9322E9E0-8693-4063-8FDC-719B342AAF25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A62CE4F-D376-4DA3-95C7-604F9033190D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A62CE4F-D376-4DA3-95C7-604F9033190D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A62CE4F-D376-4DA3-95C7-604F9033190D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A62CE4F-D376-4DA3-95C7-604F9033190D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{441B2C1F-7EDB-4A57-BB18-46C07376684D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{441B2C1F-7EDB-4A57-BB18-46C07376684D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{441B2C1F-7EDB-4A57-BB18-46C07376684D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{441B2C1F-7EDB-4A57-BB18-46C07376684D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E14CE6-2732-4530-AD65-98DEECDBBBE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E14CE6-2732-4530-AD65-98DEECDBBBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E14CE6-2732-4530-AD65-98DEECDBBBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E14CE6-2732-4530-AD65-98DEECDBBBE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCF56D8B-C05B-4FEE-A0D3-63DC46AA7A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCF56D8B-C05B-4FEE-A0D3-63DC46AA7A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCF56D8B-C05B-4FEE-A0D3-63DC46AA7A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCF56D8B-C05B-4FEE-A0D3-63DC46AA7A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52E9491C-0639-4CEB-BC82-2034852ADA6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52E9491C-0639-4CEB-BC82-2034852ADA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52E9491C-0639-4CEB-BC82-2034852ADA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52E9491C-0639-4CEB-BC82-2034852ADA6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A444BD5-3A99-40F5-98CE-0809D06B78DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A444BD5-3A99-40F5-98CE-0809D06B78DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A444BD5-3A99-40F5-98CE-0809D06B78DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A444BD5-3A99-40F5-98CE-0809D06B78DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AE7E76A8-243D-46BE-A5A7-019327795FE1} = {59432B18-F324-4532-90CD-E5A990BEC59E}
+		{9322E9E0-8693-4063-8FDC-719B342AAF25} = {59432B18-F324-4532-90CD-E5A990BEC59E}
+		{8A62CE4F-D376-4DA3-95C7-604F9033190D} = {59432B18-F324-4532-90CD-E5A990BEC59E}
+		{441B2C1F-7EDB-4A57-BB18-46C07376684D} = {59432B18-F324-4532-90CD-E5A990BEC59E}
+		{B4E14CE6-2732-4530-AD65-98DEECDBBBE8} = {59432B18-F324-4532-90CD-E5A990BEC59E}
+		{FCF56D8B-C05B-4FEE-A0D3-63DC46AA7A3A} = {CEA0F43D-1888-40BC-B5AE-94DAEA3103EE}
+		{52E9491C-0639-4CEB-BC82-2034852ADA6E} = {CEA0F43D-1888-40BC-B5AE-94DAEA3103EE}
+		{9A444BD5-3A99-40F5-98CE-0809D06B78DE} = {CEA0F43D-1888-40BC-B5AE-94DAEA3103EE}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://pratikvsb.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ServiceBus.Artifacts\\ServiceBus.Artifacts.csproj
+		SccProjectName1 = ServiceBus.Artifacts
+		SccLocalPath1 = ServiceBus.Artifacts
+		SccProjectUniqueName2 = Messages\\Messages.Contracts\\Messages.Contracts.csproj
+		SccProjectTopLevelParentUniqueName2 = BrokeredMessages.sln
+		SccProjectName2 = Messages/Messages.Contracts
+		SccLocalPath2 = Messages\\Messages.Contracts
+		SccProjectUniqueName3 = Messages.Sender\\Messages.Sender.csproj
+		SccProjectTopLevelParentUniqueName3 = BrokeredMessages.sln
+		SccProjectName3 = Messages.Sender
+		SccLocalPath3 = Messages.Sender
+		SccProjectUniqueName4 = Messages\\Json.Receiver\\Json.Receiver.csproj
+		SccProjectTopLevelParentUniqueName4 = BrokeredMessages.sln
+		SccProjectName4 = Messages/Json.Receiver
+		SccLocalPath4 = Messages\\Json.Receiver
+		SccProjectUniqueName5 = Messages\\Json.Sender\\Json.Sender.csproj
+		SccProjectTopLevelParentUniqueName5 = BrokeredMessages.sln
+		SccProjectName5 = Messages/Json.Sender
+		SccLocalPath5 = Messages\\Json.Sender
+		SccProjectUniqueName6 = Messages\\Messages.Receiver\\Messages.Receiver.csproj
+		SccProjectTopLevelParentUniqueName6 = BrokeredMessages.sln
+		SccProjectName6 = Messages/Messages.Receiver
+		SccLocalPath6 = Messages\\Messages.Receiver
+		SccProjectUniqueName7 = PubSub\\Notification\\Notification.csproj
+		SccProjectTopLevelParentUniqueName7 = BrokeredMessages.sln
+		SccProjectName7 = PubSub/Notification
+		SccLocalPath7 = PubSub\\Notification
+		SccProjectUniqueName8 = Filter\\Filter.csproj
+		SccProjectTopLevelParentUniqueName8 = BrokeredMessages.sln
+		SccProjectName8 = Filter
+		SccLocalPath8 = Filter
+		SccProjectUniqueName9 = Filter.Wiretap\\Filter.Wiretap.csproj
+		SccProjectTopLevelParentUniqueName9 = BrokeredMessages.sln
+		SccProjectName9 = Filter.Wiretap
+		SccLocalPath9 = Filter.Wiretap
+	EndGlobalSection
+EndGlobal
