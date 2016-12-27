@@ -1,0 +1,105 @@
+{
+    "$connections": {
+        "value": {
+            "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/sql": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/rg-msonecatalogdev/providers/Microsoft.Web/connections/sql-1",
+                "connectionName": "sql-1",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/sql"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "For_each": {
+                "actions": {
+                    "Execute_stored_procedure": {
+                        "inputs": {
+                            "body": {
+                                "AuthorName": "@item()['author']"a
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southeastasia.azure-apim.net/apim/sql"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/sql']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/datasets/default/procedures/@{encodeURIComponent(encodeURIComponent('uspCreateAuthor'))}"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    },
+                    "Insert_row": {
+                        "inputs": {
+                            "body": {
+                                "Abstract": "@item()['abstract']",
+                                "AuthorId": "@body('Execute_stored_procedure')?['ResultSets']['Table1'][0]['AuthorId']",
+                                "CreatedBy": "worker",
+                                "CreatedOn": "@utcnow()",
+                                "Description": "@item()['description']",
+                                "ImagePath": "@item()['imagePath']",
+                                "IsDeleted": false,
+                                "LastModifiedBy": "worker",
+                                "LastModifiedOn": "@utcnow()",
+                                "Price": "@item()['price']",
+                                "SubjectId": 1,
+                                "Year": "@item()['yearOfPUblish']"
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southeastasia.azure-apim.net/apim/sql"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/sql']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('Book'))}/items"
+                        },
+                        "runAfter": {
+                            "Execute_stored_procedure": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "ApiConnection"
+                    }
+                },
+                "foreach": "@body('HTTP')",
+                "runAfter": {
+                    "HTTP": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "HTTP": {
+                "inputs": {
+                    "method": "GET",
+                    "uri": "http://phxmobileapi.azurewebsites.net/api/books"
+                },
+                "runAfter": {},
+                "type": "Http"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

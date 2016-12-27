@@ -1,0 +1,88 @@
+{
+    "$connections": {
+        "value": {
+            "facebook": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/connections/facebook",
+                "connectionName": "facebook",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/facebook"
+            },
+            "twitter_1": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/connections/twitter-1",
+                "connectionName": "twitter-1",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/twitter"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "For_each": {
+                "actions": {
+                    "Post_a_tweet": {
+                        "inputs": {
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southeastasia.azure-apim.net/apim/twitter"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['twitter_1']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/posttweet",
+                            "queries": {
+                                "tweetText": "@{item()?['message']} \n\n @{item()?['link']}"
+                            }
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "foreach": "@body('Get_page_feed')?['data']",
+                "runAfter": {
+                    "Get_page_feed": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "Get_page_feed": {
+                "inputs": {
+                    "host": {
+                        "api": {
+                            "runtimeUrl": "https://logic-apis-southeastasia.azure-apim.net/apim/facebook"
+                        },
+                        "connection": {
+                            "name": "@parameters('$connections')['facebook']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent('ecosters')}/feed",
+                    "queries": {
+                        "fields": "id, created_time, from, message, to, type,link",
+                        "limit": 1
+                    }
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

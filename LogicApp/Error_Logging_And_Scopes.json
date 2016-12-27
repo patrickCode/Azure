@@ -1,0 +1,143 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Filter_array": {
+                "inputs": {
+                    "from": "@result('ProcessScope')",
+                    "where": "@equals(item()['status'], 'Failed')"
+                },
+                "runAfter": {
+                    "ProcessScope": [
+                        "Failed"
+                    ]
+                },
+                "type": "Query"
+            },
+            "For_each": {
+                "actions": {
+                    "HTTP": {
+                        "inputs": {
+                            "body": {
+                                "CorrelationId": "@guid()",
+                                "Message": "@string(item()['outputs']['body'])"
+                            },
+                            "method": "POST",
+                            "uri": "http://phxmobileapi.azurewebsites.net/api/logs"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
+                    }
+                },
+                "foreach": "@body('Filter_array')",
+                "runAfter": {
+                    "Filter_array": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "ProcessScope": {
+                "actions": {
+                    "AlwaysFail": {
+                        "inputs": {
+                            "body": {},
+                            "function": {
+                                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/sites/func-logicapp-demo/functions/AlwaysFail"
+                            },
+                            "retryPolicy": {
+                                "type": "none"
+                            }
+                        },
+                        "runAfter": {
+                            "AlwaysSucceed": [
+                                "Succeeded",
+                                "Failed",
+                                "Skipped"
+                            ]
+                        },
+                        "type": "Function"
+                    },
+                    "AlwaysFail_2": {
+                        "inputs": {
+                            "body": {},
+                            "function": {
+                                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/sites/func-logicapp-demo/functions/AlwaysFail"
+                            },
+                            "retryPolicy": {
+                                "type": "none"
+                            }
+                        },
+                        "runAfter": {
+                            "AlwaysSucceed_2": [
+                                "Succeeded",
+                                "Failed",
+                                "Skipped"
+                            ]
+                        },
+                        "type": "Function"
+                    },
+                    "AlwaysFail_3": {
+                        "inputs": {
+                            "body": {},
+                            "function": {
+                                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/sites/func-logicapp-demo/functions/AlwaysFail"
+                            },
+                            "retryPolicy": {
+                                "type": "none"
+                            }
+                        },
+                        "runAfter": {
+                            "AlwaysFail_2": [
+                                "Succeeded",
+                                "Failed",
+                                "Skipped"
+                            ]
+                        },
+                        "type": "Function"
+                    },
+                    "AlwaysSucceed": {
+                        "inputs": {
+                            "body": {},
+                            "function": {
+                                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/sites/func-logicapp-demo/functions/AlwaysSucceed"
+                            }
+                        },
+                        "runAfter": {},
+                        "type": "Function"
+                    },
+                    "AlwaysSucceed_2": {
+                        "inputs": {
+                            "body": {},
+                            "function": {
+                                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/sites/func-logicapp-demo/functions/AlwaysSucceed"
+                            }
+                        },
+                        "runAfter": {
+                            "AlwaysFail": [
+                                "Succeeded",
+                                "Failed",
+                                "Skipped"
+                            ]
+                        },
+                        "type": "Function"
+                    }
+                },
+                "runAfter": {},
+                "type": "Scope"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {},
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

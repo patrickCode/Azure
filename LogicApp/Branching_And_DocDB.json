@@ -1,0 +1,252 @@
+{
+    "$connections": {
+        "value": {
+            "documentdb": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/rg-func/providers/Microsoft.Web/connections/documentdb",
+                "connectionName": "documentdb",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/documentdb"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "PackageProcessor": {
+                "actions": {
+                    "ApiPackagesByCodeIdentityGet": {
+                        "inputs": {
+                            "method": "get",
+                            "uri": "https://phoenixidentityproviderdev.azurewebsites.net/api/packages/@{encodeURIComponent(item()['code'])}/identity"
+                        },
+                        "metadata": {
+                            "apiDefinitionUrl": "https://phoenixidentityproviderdev.azurewebsites.net/swagger/v1/swagger.json",
+                            "swaggerSource": "custom"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
+                    },
+                    "IfPackageCodeExists": {
+                        "actions": {
+                            "Create_or_update_package_document": {
+                                "inputs": {
+                                    "body": {
+                                        "id": "@body('ApiPackagesByCodeIdentityGet')?['code']",
+                                        "isStandalone": "@body('ApiPackagesByCodeIdentityGet')?['isStandalone']",
+                                        "name": "@body('ApiPackagesByCodeIdentityGet')?['name']",
+                                        "packageType": "@body('ApiPackagesByCodeIdentityGet')?['packageType']",
+                                        "type": "Package"
+                                    },
+                                    "headers": {
+                                        "x-ms-documentdb-is-upsert": true
+                                    },
+                                    "host": {
+                                        "api": {
+                                            "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/documentdb"
+                                        },
+                                        "connection": {
+                                            "name": "@parameters('$connections')['documentdb']['connectionId']"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/dbs/@{encodeURIComponent('codes_db')}/colls/@{encodeURIComponent('codes')}/docs"
+                                },
+                                "runAfter": {},
+                                "type": "ApiConnection"
+                            }
+                        },
+                        "expression": "@not(equals(actions('ApiPackagesByCodeIdentityGet').outputs.statusCode, 204))",
+                        "runAfter": {
+                            "ApiPackagesByCodeIdentityGet": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "If"
+                    }
+                },
+                "foreach": "@triggerBody()['packageCodes']",
+                "runAfter": {},
+                "type": "Foreach"
+            },
+            "ResourceProcessor": {
+                "actions": {
+                    "ApiResourcesByCodeIdentityGet": {
+                        "inputs": {
+                            "method": "get",
+                            "uri": "https://phoenixidentityproviderdev.azurewebsites.net/api/resources/@{encodeURIComponent(item()['code'])}/identity"
+                        },
+                        "metadata": {
+                            "apiDefinitionUrl": "https://phoenixidentityproviderdev.azurewebsites.net/swagger/v1/swagger.json",
+                            "swaggerSource": "custom"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
+                    },
+                    "IfResourceCodeExists": {
+                        "actions": {
+                            "Create_or_update_resource_document": {
+                                "inputs": {
+                                    "body": {
+                                        "deliveryDomain": "@body('ApiResourcesByCodeIdentityGet')?['deliveryDomain']",
+                                        "id": "@body('ApiResourcesByCodeIdentityGet')?['code']",
+                                        "name": "@body('ApiResourcesByCodeIdentityGet')?['name']",
+                                        "type": "Resource"
+                                    },
+                                    "headers": {
+                                        "x-ms-documentdb-is-upsert": true
+                                    },
+                                    "host": {
+                                        "api": {
+                                            "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/documentdb"
+                                        },
+                                        "connection": {
+                                            "name": "@parameters('$connections')['documentdb']['connectionId']"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/dbs/@{encodeURIComponent('codes_db')}/colls/@{encodeURIComponent('codes')}/docs"
+                                },
+                                "runAfter": {},
+                                "type": "ApiConnection"
+                            }
+                        },
+                        "expression": "@not(equals(actions('ApiResourcesByCodeIdentityGet').outputs.statusCode, 204))",
+                        "runAfter": {
+                            "ApiResourcesByCodeIdentityGet": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "If"
+                    }
+                },
+                "foreach": "@triggerBody()['resourceCodes']",
+                "runAfter": {},
+                "type": "Foreach"
+            },
+            "ServiceCodes": {
+                "actions": {
+                    "ApiServicesByCodeIdentityGet": {
+                        "inputs": {
+                            "method": "get",
+                            "uri": "https://phoenixidentityproviderdev.azurewebsites.net/api/services/@{encodeURIComponent(item()['code'])}/identity"
+                        },
+                        "metadata": {
+                            "apiDefinitionUrl": "https://phoenixidentityproviderdev.azurewebsites.net/swagger/v1/swagger.json",
+                            "swaggerSource": "custom"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
+                    },
+                    "Condition": {
+                        "actions": {
+                            "Create_or_update_service_document": {
+                                "inputs": {
+                                    "body": {
+                                        "id": "@body('ApiServicesByCodeIdentityGet')?['code']",
+                                        "isGroup": "@body('ApiServicesByCodeIdentityGet')?['isGroup']",
+                                        "name": "@body('ApiServicesByCodeIdentityGet')?['name']",
+                                        "packageType": "@body('ApiServicesByCodeIdentityGet')?['serviceType']",
+                                        "type": "Service"
+                                    },
+                                    "headers": {
+                                        "x-ms-documentdb-is-upsert": true
+                                    },
+                                    "host": {
+                                        "api": {
+                                            "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/documentdb"
+                                        },
+                                        "connection": {
+                                            "name": "@parameters('$connections')['documentdb']['connectionId']"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/dbs/@{encodeURIComponent('codes_db')}/colls/@{encodeURIComponent('codes')}/docs"
+                                },
+                                "runAfter": {},
+                                "type": "ApiConnection"
+                            }
+                        },
+                        "expression": "@not(equals(actions('ApiServicesByCodeIdentityGet').outputs.statusCode, 204))",
+                        "runAfter": {
+                            "ApiServicesByCodeIdentityGet": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "If"
+                    }
+                },
+                "foreach": "@triggerBody()['serviceCodes']",
+                "runAfter": {},
+                "type": "Foreach"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {
+                        "$schema": "http://json-schema.org/draft-04/schema#",
+                        "properties": {
+                            "packageCodes": {
+                                "items": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "code"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "resourceCodes": {
+                                "items": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "code"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "serviceCodes": {
+                                "items": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "code"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "resourceCodes",
+                            "serviceCodes",
+                            "packageCodes"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

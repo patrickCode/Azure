@@ -1,0 +1,84 @@
+{
+    "$connections": {
+        "value": {
+            "outlook_1": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/connections/outlook-1",
+                "connectionName": "outlook-1",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/outlook"
+            },
+            "visualstudioteamservices": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/eg-lgapp-test/providers/Microsoft.Web/connections/visualstudioteamservices",
+                "connectionName": "visualstudioteamservices",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southeastasia/managedApis/visualstudioteamservices"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "Send_an_email": {
+                        "inputs": {
+                            "body": {
+                                "Body": "A Bug has been assigned to you.\n\nTitle - @{triggerBody()?['fields']?['System_Title']}\nID - @{triggerBody()?['id']}\nDescription - @{triggerBody()?['fields']?['System_Description']}",
+                                "Subject": "New Bug Assigned",
+                                "To": "pratikb@microsoft.com"
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southeastasia.azure-apim.net/apim/outlook"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['outlook_1']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/Mail"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "expression": "@equals(triggerBody()?['fields']?['System_WorkItemType'], 'Bug')",
+                "runAfter": {},
+                "type": "If"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_work_item_is_assigned": {
+                "inputs": {
+                    "host": {
+                        "api": {
+                            "runtimeUrl": "https://logic-apis-southeastasia.azure-apim.net/apim/visualstudioteamservices"
+                        },
+                        "connection": {
+                            "name": "@parameters('$connections')['visualstudioteamservices']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/workitemassigned_trigger/@{encodeURIComponent('Design Patterns')}/_apis/wit/wiql",
+                    "queries": {
+                        "account": "pratikvsb",
+                        "team": "Design Patterns Team",
+                        "wiql__System_AssignedTo": "pratikb@microsoft.com"
+                    }
+                },
+                "recurrence": {
+                    "frequency": "Minute",
+                    "interval": 1
+                },
+                "splitOn": "@triggerBody()?.value",
+                "type": "ApiConnection"
+            }
+        }
+    }
+}
