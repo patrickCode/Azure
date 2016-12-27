@@ -1,0 +1,74 @@
+{
+    "$connections": {
+        "value": {
+            "yammer": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/rg-func/providers/Microsoft.Web/connections/yammer",
+                "connectionName": "yammer",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/yammer"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "Post_message": {
+                        "inputs": {
+                            "body": {
+                                "body": "Thanks for your post",
+                                "group_id": 10171184,
+                                "replied_to_id": "@triggerBody()?['id']"
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/yammer"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['yammer']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/messages.json"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "expression": "@contains(triggerBody()?['content_excerpt'], 'Logic App')",
+                "runAfter": {},
+                "type": "If"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_there_is_a_new_message_in_a_group": {
+                "inputs": {
+                    "host": {
+                        "api": {
+                            "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/yammer"
+                        },
+                        "connection": {
+                            "name": "@parameters('$connections')['yammer']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/trigger/in_group/@{encodeURIComponent('10171184')}.json"
+                },
+                "recurrence": {
+                    "frequency": "Minute",
+                    "interval": 1
+                },
+                "splitOn": "@triggerBody()?.messages",
+                "type": "ApiConnection"
+            }
+        }
+    }
+}

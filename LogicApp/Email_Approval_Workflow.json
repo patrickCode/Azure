@@ -1,0 +1,174 @@
+{
+    "$connections": {
+        "value": {
+            "outlook_1": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/rg-func/providers/Microsoft.Web/connections/outlook-1",
+                "connectionName": "outlook-1",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/outlook"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "HTTP": {
+                        "inputs": {
+                            "body": {
+                                "isDeleted": false,
+                                "isEnabled": false,
+                                "itemId": 0,
+                                "listPrices": [
+                                    {
+                                        "geography": {
+                                            "geographyName": "@triggerBody()['geographyName']",
+                                            "isActive": false,
+                                            "isDeleted": false
+                                        },
+                                        "isActive": false,
+                                        "practiceType": {
+                                            "code": "@triggerBody()['priacticeType']"
+                                        },
+                                        "rate": "@triggerBody()['price']"
+                                    }
+                                ],
+                                "name": "@triggerBody()['itemname']"
+                            },
+                            "method": "POST",
+                            "uri": "http://managephoenix.azurewebsites.net/api/items/@{triggerBody()['itemname']}/listprice"
+                        },
+                        "runAfter": {},
+                        "type": "Http"
+                    },
+                    "Send_Approved_mail": {
+                        "inputs": {
+                            "body": {
+                                "Body": "Your request for updating the Price of @{triggerBody()['itemname']} in @{triggerBody()['geographyName']} has been approved.\n\nFor checking the latest price please visit the catalogue or check in Phoenix Bot.",
+                                "Subject": "Price Update Accepted",
+                                "To": "@{triggerBody()['userAlias']}"
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/outlook"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['outlook_1']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/Mail"
+                        },
+                        "runAfter": {
+                            "HTTP": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "ApiConnection"
+                    }
+                },
+                "else": {
+                    "actions": {
+                        "Send_an_email": {
+                            "inputs": {
+                                "body": {
+                                    "Body": "Your request for updating the Price of @{triggerBody()['itemname']} in @{triggerBody()['geographyName']} has been rejected.\n\nPlease contact Business Desk for more details.",
+                                    "Subject": "Price Update Rejected",
+                                    "To": "@{triggerBody()['userAlias']}"
+                                },
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/outlook"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['outlook_1']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Mail"
+                            },
+                            "runAfter": {},
+                            "type": "ApiConnection"
+                        }
+                    }
+                },
+                "expression": "@equals(body('Send_approval_email')?['SelectedOption'], 'Approve')",
+                "runAfter": {
+                    "Send_approval_email": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "If"
+            },
+            "Send_approval_email": {
+                "inputs": {
+                    "body": {
+                        "Message": {
+                            "Body": "Hi,\n\n@{triggerBody()['userAlias']}  has raised a request to update the price of @{triggerBody()['itemname']} in @{triggerBody()['geographyName']} (Practice Type - @{triggerBody()['priacticeType']}) to @{triggerBody()['price']}.\n\nPlease approve or reject the request.\n\nThanks,\nPhoenix Bot",
+                            "Importance": "Normal",
+                            "Options": "Approve, Reject",
+                            "Subject": "Price Approval Request",
+                            "To": "pratikb@microsoft.com"
+                        },
+                        "NotificationUrl": "@listCallbackUrl()"
+                    },
+                    "host": {
+                        "api": {
+                            "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/outlook"
+                        },
+                        "connection": {
+                            "name": "@parameters('$connections')['outlook_1']['connectionId']"
+                        }
+                    },
+                    "path": "/approvalmail/$subscriptions"
+                },
+                "runAfter": {},
+                "type": "ApiConnectionWebhook"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {
+                        "$schema": "http://json-schema.org/draft-04/schema#",
+                        "properties": {
+                            "geographyName": {
+                                "type": "string"
+                            },
+                            "itemname": {
+                                "type": "string"
+                            },
+                            "priacticeType": {
+                                "type": "integer"
+                            },
+                            "price": {
+                                "type": "number"
+                            },
+                            "userAlias": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "itemname",
+                            "geographyName",
+                            "priacticeType",
+                            "price",
+                            "userAlias"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

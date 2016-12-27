@@ -1,0 +1,110 @@
+{
+    "$connections": {
+        "value": {
+            "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/sql": {
+                "connectionId": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/resourceGroups/rg-func/providers/Microsoft.Web/connections/sql-2",
+                "connectionName": "sql-2",
+                "id": "/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/sql"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "For_each": {
+                "actions": {
+                    "InsertAuthor": {
+                        "inputs": {
+                            "body": {
+                                "CreatedBy": "worker",
+                                "CreatedOn": "@utcnow()",
+                                "IsDeleted": "false",
+                                "LastModifedBy": "worker",
+                                "LastModifiedOn": "@utcnow()",
+                                "Name": "@item()['author']"
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/sql"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/sql']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[dbo].[Author]'))}/items"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    },
+                    "InsertBook": {
+                        "inputs": {
+                            "body": {
+                                "Abstract": "@item()['abstract']",
+                                "AuthorId": "@body('InsertAuthor')?['AuthorId']",
+                                "CreatedBy": "worker",
+                                "CreatedOn": "@utcnow()",
+                                "Description": "@item()['description']",
+                                "ImagePath": "@item()['imagePath']",
+                                "IsDeleted": "false",
+                                "LastModifiedBy": "worker",
+                                "LastModifiedOn": "@utcnow()",
+                                "Price": "@item()['price']",
+                                "SubjectId": 1,
+                                "Year": "@item()['yearOfPUblish']"
+                            },
+                            "host": {
+                                "api": {
+                                    "runtimeUrl": "https://logic-apis-southcentralus.azure-apim.net/apim/sql"
+                                },
+                                "connection": {
+                                    "name": "@parameters('$connections')['/subscriptions/f23abd62-9cb4-4f44-8596-110f8275e76a/providers/Microsoft.Web/locations/southcentralus/managedApis/sql']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('[dbo].[Book]'))}/items"
+                        },
+                        "runAfter": {
+                            "InsertAuthor": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "ApiConnection"
+                    }
+                },
+                "foreach": "@body('GetBooks')",
+                "runAfter": {
+                    "GetBooks": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "GetBooks": {
+                "inputs": {
+                    "method": "GET",
+                    "uri": "http://phxmobileapi.azurewebsites.net/api/books"
+                },
+                "runAfter": {},
+                "type": "Http"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}
