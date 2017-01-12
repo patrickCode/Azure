@@ -1,0 +1,22 @@
+{
+  "title": "Microsoft.KeyVault.Core",
+  "copyright": "Microsoft",
+  "description": "Library for supporting Key Vault Operations",
+  "language": "en",
+  "version": "1.0.0-0",
+
+  "dependencies": {
+    "Microsoft.Extensions.Configuration.AzureKeyVault": "1.0.0",
+    "NETStandard.Library": "1.6.1",
+    "System.Linq.Queryable": "4.0.1",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
+    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.8",
+    "Microsoft.IdentityModel.Tokens": "5.1.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": [ "dnxcore50", "portable-net45+win8+wp8+wpa81" ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "copyright": "Microsoft",
+  "title": "Microsoft.KeyVault.Core.Tests",
+  "language": "en",
+  "version": "1.0.0-*",
+  "testRunner": "mstest",
+
+  "dependencies": {
+    "dotnet-test-mstest": "1.0.1-preview",
+    "MSTest.TestFramework": "1.0.0-preview",
+    "KeyVault": "1.0.0-0",
+    "NETStandard.Library": "1.6.1"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": [ "dnxcore50", "netcoreapp1.0", "portable-net45+win8", "net45", "portable-net45+win8+wp8+wpa81" ]
+    }
+  },
+
+  "runtimes": {
+    "win10-x64": {}
+  }
+}
