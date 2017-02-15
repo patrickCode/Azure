@@ -19,8 +19,8 @@ namespace Messages.Receiver
 
             //ReceiveMessage();
 
-            //ReceiveMessageUsingOnMessage(1);
-            ReceiveMessageUsingOnMessage(10);
+            ReceiveMessageUsingOnMessage(1);
+            //ReceiveMessageUsingOnMessage(10);
             //ReceiveMessageUsingOnMessage(30);
 
             StopReceiving();

@@ -1,0 +1,39 @@
+﻿@model Common.Table.ServiceRequest
+<div class="jumbotron">
+    <h1>Queue-Based Load Leveling Pattern</h1>
+    <p class="lead">Use a queue that acts as a buffer between a task and a service that it invokes in order to smooth intermittent heavy loads that may otherwise cause the service to fail or the task to time out. This pattern can help to minimize the impact of peaks in demand on availability and responsiveness for both the task and the service.</p>
+    <p><a href="https://msdn.microsoft.com/en-us/library/dn589783.aspx" target="_blank" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+<div class="row">
+    <h3>Create Service Request</h3>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {   
+        <form>
+            <div class="form-group">
+                <label class="control-label">ID</label>
+                @Html.TextBoxFor(sr => sr.Id, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label class="control-label">Command</label>
+                @Html.TextBoxFor(sr => sr.Command, new { @class = "form-control" } )
+            </div>
+            <div class="form-group">
+                <label class="control-label">Type</label>
+                @Html.DropDownListFor(m => m.Type, new List<SelectListItem>
+                       { new SelectListItem{Text="Part Number", Value="PartNumber"},
+                         new SelectListItem{Text="Cost Rate", Value="CostRate"}}, "Please select", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label class="control-label">Client</label>
+                @Html.TextBoxFor(sr => sr.ClientName, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Create" />
+            </div>
+        </form>
+    }
+
+    <h3>Request Status</h3>
+    <h4>Tracker - @ViewBag.Tracker</h4>
+
+</div>
