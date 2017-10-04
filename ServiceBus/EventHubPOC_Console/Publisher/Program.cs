@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceBus.Messaging;
 using System.Configuration;
+using Microsoft.ServiceBus;
 
 namespace Publisher
 {
@@ -16,8 +17,15 @@ namespace Publisher
         static EventHubClient _eventHubClient;
         static void Main(string[] args)
         {
+            var namespaceManager = NamespaceManager.CreateFromConnectionString(ServiceBusConnectionString);
+            var hubs = namespaceManager.GetEventHubs();
+
+
+            var ehd = new EventHubDescription(EventHubName);
+
+
             _eventHubClient = EventHubClient.CreateFromConnectionString(ServiceBusConnectionString, EventHubName);
-            MessageSender();
+            //MessageSender();
         }
 
         static void MessageSender()
@@ -41,3 +49,4 @@ namespace Publisher
         }
     }
 }
+;
